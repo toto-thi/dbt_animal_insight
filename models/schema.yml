@@ -1,0 +1,141 @@
+version: 2
+
+models:
+  - name: stg_iucn_species
+    description: "Staged IUCN species data"
+    columns:
+      - name: scientific_name
+        description: "Scientific name of the species"
+        tests: [not_null, unique]
+
+  - name: stg_cites_trade
+    description: "Staged CITES trade data"
+    columns:
+      - name: year
+        description: "Year of the trade record"
+        tests: [not_null]
+      - name: taxon
+        description: "Taxonomic name of the species"
+        tests: [not_null]
+
+  - name: stg_gbif_sightings
+    description: "Staged GBIF sightings data"
+    columns:
+      - name: title
+        description: "Title of the publication"
+        tests: [not_null]
+      - name: publication_date
+        description: "Date of publication"
+        tests: [not_null]
+
+  # Fact Models - Conservation
+  - name: fact_species_conservation
+    description: "Fact table for species conservation data"
+    columns:
+      - name: scientific_name
+        description: "Scientific name of the species"
+        tests:
+          - not_null
+          - unique
+      - name: species_recovery_category
+        description: "Category indicating the recovery status of the species"
+      - name: assessment_year
+        description: "Year the species was assessed"
+        tests:
+          - not_null
+  
+  # Fact Models - Trade
+  - name: fact_species_trade
+    description: "Fact table for species trade data"
+    columns:
+      - name: year
+        description: "Year of the trade record"
+        tests:
+          - not_null
+      - name: scientific_name
+        description: "Scientific name of the species"
+        tests:
+          - not_null
+      - name: total_import_quantity
+        description: "Total quantity imported"
+      - name: total_export_quantity
+        description: "Total quantity exported"
+      - name: trade_records
+        description: "Number of trade records"
+        tests:
+          - not_null
+
+  # Fact Models - Publications
+  - name: fact_publications
+    description: "Fact table for publications data by year"
+    columns:
+      - name: year
+        description: "Year of publication"
+        tests:
+          - not_null
+          - unique
+      - name: publication_count
+        description: "Number of publications in the year"
+        tests:
+          - not_null
+      - name: unique_publications
+        description: "Number of unique publications in the year"
+        tests:
+          - not_null
+  
+  # Analysis Models
+  - name: conservation_by_year
+    description: "Analysis of conservation status by year"
+    columns:
+      - name: year
+        description: "Assessment year"
+        tests:
+          - not_null
+      - name: species_recovery_category
+        description: "Category indicating the recovery status of the species"
+        tests:
+          - not_null
+      - name: species_count
+        description: "Number of species in this category"
+        tests:
+          - not_null
+
+  - name: trade_by_year
+    description: "Analysis of trade volumes by year"
+    columns:
+      - name: year
+        description: "Year of trade"
+        tests:
+          - not_null
+          - unique
+      - name: total_imports
+        description: "Total import quantity across all species"
+        tests:
+          - not_null
+      - name: total_exports
+        description: "Total export quantity across all species"
+        tests:
+          - not_null
+      - name: net_exports
+        description: "Net exports (exports minus imports)"
+      - name: traded_species_count
+        description: "Number of unique species traded"
+        tests:
+          - not_null
+
+  - name: species_across_data_sources
+    description: "Species that appear in multiple data sources"
+    columns:
+      - name: scientific_name
+        description: "Scientific name of the species"
+        tests:
+          - not_null
+          - unique
+      - name: source_count
+        description: "Number of data sources where this species appears"
+        tests:
+          - not_null
+      - name: sources
+        description: "Comma-separated list of data sources"
+        tests:
+          - not_null

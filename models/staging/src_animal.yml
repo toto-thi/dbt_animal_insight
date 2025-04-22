@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: animal_data
+    database: ""  
+    schema: main   
+    tables:
+      - name: iucn_species
+      - name: cites_trade
+      - name: gbif_sightings

@@ -1,0 +1,27 @@
+name: 'dbt_animal_insights'
+version: '1.0.0'
+
+profile: 'dbt_animal_insights'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:         # directories to be removed by `dbt clean`
+  - "target"
+  - "dbt_packages"
+
+
+models:
+  dbt_animal_insights:
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table
+      dims:
+        +materialized: table
+      conservation_trade:
+        +materialized: table
