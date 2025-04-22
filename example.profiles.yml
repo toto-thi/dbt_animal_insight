@@ -1,0 +1,8 @@
+dbt_animal_insights:
+  target: dev
+
+  dev:
+      type: duckdb
+      path: "YOUR_ACTUAL_PATH_TO_DUCKDB/animal_insights.duckdb"
+      schema: "main" # main is the default schema in DuckDB, you can remove here if not naming anythign new
+      threads: 4
